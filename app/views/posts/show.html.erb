@@ -1,1 +1,46 @@
+<h2> <%= @post.title %> </h2>
 
+<h3>Content:</h3>
+<p> <%= @post.content %> </p>
+
+<h4> Categories: </h4>
+<p>
+<% @post.categories.each do |category| %>
+      <%= category.name %>
+<% end %>
+</p>
+
+
+<h5> Comments: </h5>
+<ul>
+    <% @post.comments.each do |comment| %>
+        <li><%= comment.user.username %> says: <%= comment.content %> </li>
+    <% end %>
+</ul>
+
+<%= form_for @comment do |cf| %>
+    <%= cf.hidden_field :post_id, value: @post.id %>
+
+    <%= cf.label :content %>
+    <%= cf.text_area :content %>
+    <br />
+
+    <p> Existing User </p>
+    <%= cf.collection_select :user_id, User.all, :id, :username, {include_blank: true} %>
+    <br />
+    <p> New User: </p>
+    <%= cf.fields_for :user, User.new do |user_form| %>
+        <%= user_form.label :username %>
+        <%= user_form.text_field :username %>
+    <% end %>
+
+    <%= cf.submit %>
+<% end %>
+<br />
+
+<h5> Users: </h5>
+<ul>
+    <% @post.users.uniq.each do |user| %>
+        <li> <%= link_to user.username, user_path(user) %> </li>
+    <% end %>
+</ul>

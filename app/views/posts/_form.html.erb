@@ -1,1 +1,18 @@
+<%= form_for post do |pf| %>
+    <%= pf.label :title %>
+    <%= pf.text_field :title %>
+    <br />
 
+    <%= pf.label :content %>
+    <%= pf.text_area :content %>
+    <br />
+
+    <%= pf.collection_check_boxes :category_ids, Category.all, :id, :name %>
+    <%= pf.fields_for :categories, post.categories.build do |cat_fields| %>
+        <%= cat_fields.label :name %>
+        <%= cat_fields.text_field :name %>
+    <% end %>
+    <br />
+
+    <%= pf.submit %>
+<% end %>
